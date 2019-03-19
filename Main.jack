@@ -1,0 +1,12 @@
+
+// by Sergio Souza Costa.
+
+class Main {
+    function void main() {
+        var MemoryGame game;
+        let game = MemoryGame.new();
+        do game.run();
+        do game.dispose();
+        return;
+    }
+}

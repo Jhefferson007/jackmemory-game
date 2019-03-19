@@ -1,0 +1,163 @@
+
+// by Sergio Souza Costa.
+
+
+/**
+ * Implements Memory game (match pairs).
+ * This simple game allows the user to move a black square around
+ * the screen, and change the square's size during the movement.
+ * When the game starts, 10 play cards is shown at the
+ * top-left corner of the screen. The user controls the square as follows.
+ * The 0 - 9  keys are used to select the card
+ * The 'q' key is used to quit the game.
+ */
+
+class MemoryGame {
+  	field Random random;
+	field int points;
+	field int attempts;
+    field Array cards;
+	field Arrays selected;
+
+   /** Constructs a new Square Game. */
+   constructor MemoryGame new() {
+      // Creates a 30 by 30 pixels square and positions it at the top-left
+      // of the screen.
+	  var int i;
+	  var int pos;
+      var int type; 
+	  var Card card;
+	  // the Random class was used from another user, given this class is not the main purpose of this project
+	  let random = Random.new(0);
+	  let pos = 40;
+	  let cards = Array.new (10); 
+	  let selected = Array.new (6);
+	  let points = 0;
+	  let attempts = 0;
+	  let i = 0;
+	  while (i < 6) {
+		let selected[i] = 0;
+		let i = i + 1;
+	  }
+	  let i = 0;
+	  while (i < 10) {
+		let type = randomPos();
+		let selected[type] = selected[type] + 1;
+		let card = Card.new(pos, 0, 40,type);
+		let cards[i] = card;
+		let i = i + 1;
+		let pos = pos + 45;
+		
+	  }
+      do printNumbers();
+	  do Output.moveCursor (10,10);
+	  do Output.printString("Memory Game");
+	  do printPoint ();
+      return this;
+   }
+
+   method int randomPos () {
+		var int r;
+		let r = random.randRange (4) + 1;
+		while (selected[r] > 1) {
+			let r = random.randRange (5);
+		}
+		return r;
+   }
+
+   method void printNumbers() {
+		var int i;
+		var int pos;
+		let i = 0;
+		let pos = 5;
+		
+		while (i < 10) {
+			do Output.moveCursor (8,pos);
+			do Output.printInt(i);
+			let pos = pos + 6;
+			let i = i + 1;
+		}
+		return;
+	}
+
+	method void printPoint () {
+		do Output.moveCursor (15,5);
+		do Output.printString("Points: ");
+		do Output.printInt(points);
+		
+		do Output.moveCursor (20,5);
+		do Output.printString("Attempts: ");
+		do Output.printInt(attempts);
+		return;
+	}
+
+   /** Runs the game: handles the user's inputs and moves the square accordingly */
+   method void run() {
+      var char key;  // the key currently pressed by the user
+	  var int turned; // the quantity turned cards
+	  var Array comp; // cards to compare
+      var boolean exit;
+	  var Card sq;
+	  var Card sq1;
+	  var Card sq2;
+      let exit = false;
+      let turned = 0;
+	  let comp = Array.new (2);
+
+      while (~exit) {
+         // waits for a key to be pressed
+         while (key = 0) {
+            let key = Keyboard.keyPressed();
+         }
+         if (key = 81)  { let exit = true; }     // q key
+         if (key > 47 & key < 58)  { 
+				if (turned < 2) {
+					let sq = cards[key-48];
+					
+					if (~(sq.getFaced () )) {
+						do sq.face();
+						let comp[turned] = sq;
+						let turned = turned + 1;
+					}
+					
+				} else {
+					let attempts = attempts +1;
+					let sq1 = comp[0];
+					let sq2 = comp[1];
+					if (sq1.getType() = sq2.getType()) {
+						let points = points + 1;
+						let turned = 0;
+					} else {
+						do sq1.back();
+						do sq2.back();
+						let turned = 0;
+					}
+					do printPoint();
+					if (points = 5) {
+							do Output.moveCursor (20,20);
+							do Output.printString("You Win");
+							let exit = true;
+					}
+				
+				}
+				 
+		} // z key
+         // waits for the key to be released
+         while (~(key = 0)) {
+            let key = Keyboard.keyPressed();
+         }
+     } // while
+     return;
+   }
+
+  /** Disposes this game. */
+   method void dispose() {
+      do Array.deAlloc(cards);
+      do Memory.deAlloc(this);
+      return;
+   }
+
+}
+
+
+

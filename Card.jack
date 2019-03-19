@@ -1,0 +1,144 @@
+
+// by Sergio Souza Costa.
+// File name: 
+
+/** Implements a graphical play card. */
+class Card {
+
+   field int x, y; // screen location of the cards's top-left corner
+   field int size; // length of this card, in pixels
+   field int type;
+	field boolean faced;
+
+   /** Constructs a new card with a given location and size. */
+   constructor Card new(int Ax, int Ay, int Asize, int Atype) {
+      let x = Ax;
+      let y = Ay;
+		let type = Atype;
+      let size = Asize;
+	   let faced = false;
+	   do back() ;
+      return this;
+   }
+
+
+   /** Backed */
+   method void back() {
+     do Screen.setColor(true);
+     do Screen.drawRectangle(x, y, x + size, y + size*2);
+	  do Screen.setColor(false);
+	  do Screen.drawRectangle(x+1, y+1, x-2 + size, y-2 + (size*2));
+	  let faced = false;
+     return;
+   }
+
+   function void drawRectangle (int x, int y, int h, int w) {
+		do Screen.drawRectangle(x, y, x + w, y + h);
+		return;
+   } 
+
+	method boolean getFaced () {
+	   return faced;
+	}
+
+	method void face () {
+		if (type = 1) {do drawType1();}
+	   if (type = 2) {do drawType2();}
+		if (type = 3) {do drawType3();}
+		if (type = 4) {do drawType4();}
+		if (type = 5) {do drawType5();}
+	   let faced = true;
+	  	return;
+	}
+
+	method int getType () {
+	  return type;
+	}
+
+   method void drawType1() {
+	 var int h;
+	 var int w;
+	 var int h2;
+	 var int w2;
+	 let w = size;
+	 let h = size*2;
+	 do Screen.setColor(true);
+    do Card.drawRectangle(x, y, h, w);
+    let w2 = w /4;
+    let h2 = h / 4;
+	 do Screen.setColor(false);
+	 do Card.drawRectangle(x+(w/2)-(w2/2), y+(h/2)-(h2/2), h2,w2);
+    return;
+   }
+
+
+   method void drawType2() {
+	 var int h;
+	 var int w;
+	 var int h2;
+	 var int w2;
+	 let w = size;
+	 let h = size*2;
+	 do Screen.setColor(true);
+    do Card.drawRectangle(x, y, h, w);
+    let w2 = w /4;
+    let h2 = h / 4;
+	 do Screen.setColor(false);
+	 do Card.drawRectangle(x+(w/2)-(w2/2), y+h2-(h2/2), h2,w2);
+	 do Card.drawRectangle(x+(w/2)-(w2/2), y+(h2*3)-(h2/2), h2,w2);
+    return;
+   }
+
+   method void drawType3() {
+	 var int h;
+	 var int w;
+	 var int d;
+	 var int h2;
+	 var int w2;
+	 let w = size;
+	 let h = size*2;
+	 do Screen.setColor(true);
+    do Card.drawRectangle(x, y, h, w);
+    let w2 = w /4;
+    let h2 = h / 4;
+	 let d = (h2 / 3) ;
+	 do Screen.setColor(false);
+	
+	 do Card.drawRectangle(x+(w/2)-(w2/2), y+d, h2,w2);
+	 do Card.drawRectangle(x+(w/2)-(w2/2), y+h2+(d*2), h2,w2);
+	 do Card.drawRectangle(x+(w/2)-(w2/2), y+(h2*2)+(d*3), h2,w2);
+    return;
+   }
+
+	method void drawType4() {
+	 var int h;
+	 var int w;
+	 let w = size;
+	 let h = size*2;
+	 do Screen.setColor(true);
+    do Card.drawRectangle(x, y, h, w);
+	 do Screen.setColor(false);
+	 do Screen.drawCircle(x+(w/2), y+(h/2), h/8);
+    return;
+   }
+
+   method void drawType5() {
+	 var int h;
+	 var int w;
+	 let w = size;
+	 let h = size*2;
+	 do Screen.setColor(true);
+    do Card.drawRectangle(x, y, h, w);
+	 do Screen.setColor(false);
+	 do Screen.drawCircle(x+(w/2), y+(h/4), h/8);
+	 do Screen.drawCircle(x+(w/2), y+(h/2)+(h/4), h/8);
+    return;
+   }
+
+   /** Disposes this card. */
+   method void dispose() {
+      do Memory.deAlloc(this);
+      return;
+   }
+  
+}
